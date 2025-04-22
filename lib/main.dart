@@ -47,15 +47,6 @@ class AuthApp extends StatelessWidget {
         ),
         filled: true,
         fillColor: Colors.grey.withOpacity(0.1),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
       ),
     );
   }
@@ -187,11 +178,17 @@ class _LoginScreenState extends State<LoginScreen> {
           onPressed: _isLoading ? null : () => Navigator.pushNamed(context, '/forgot-password'),
           child: Text(
             'Esqueceu a senha?',
-            style: TextStyle(color: const Color(0xFF6C63FF), fontWeight: FontWeight.w500),
+            style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w500),
           ),
         ),
         const SizedBox(width: 20),
-        
+        TextButton(
+          onPressed: _isLoading ? null : () => Navigator.pushNamed(context, '/signup'),
+          child: const Text(
+            'Cadastre-se',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+        ),
       ],
     );
   }
