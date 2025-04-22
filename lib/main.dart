@@ -47,6 +47,15 @@ class AuthApp extends StatelessWidget {
         ),
         filled: true,
         fillColor: Colors.grey.withOpacity(0.1),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
       ),
     );
   }
@@ -178,17 +187,11 @@ class _LoginScreenState extends State<LoginScreen> {
           onPressed: _isLoading ? null : () => Navigator.pushNamed(context, '/forgot-password'),
           child: Text(
             'Esqueceu a senha?',
-            style: TextStyle(color: Colors.grey.shade200, fontWeight: FontWeight.w500),
+            style: TextStyle(color: const Color(0xFF6C63FF), fontWeight: FontWeight.w500),
           ),
         ),
         const SizedBox(width: 20),
-        TextButton(
-          onPressed: _isLoading ? null : () => Navigator.pushNamed(context, '/signup'),
-          child: const Text(
-            'Cadastre-se',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-          ),
-        ),
+        
       ],
     );
   }
@@ -230,41 +233,86 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           child: Center(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(32),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  AnimatedOpacity(
-                    duration: const Duration(milliseconds: 500),
-                    opacity: 1,
-                    child: Container(
-                      padding: const EdgeInsets.all(32),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(24),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 20,
-                            spreadRadius: 2,
-                          ),
-                        ],
-                      ),
-                      child: Form(
-                        key: _formKey,
-                        child: Column(
-                          children: [
-                            Text(title, style: Theme.of(context).textTheme.headlineSmall),
-                            const SizedBox(height: 8),
-                            Text(subtitle, style: Theme.of(context).textTheme.bodyMedium),
-                            const SizedBox(height: 32),
-                            ...children,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 400),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.lock_outline_rounded,
+                      size: 64,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(height: 32),
+                    AnimatedOpacity(
+                      duration: const Duration(milliseconds: 500),
+                      opacity: 1,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 32,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(24),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 20,
+                              spreadRadius: 2,
+                            ),
                           ],
+                        ),
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                title,
+                                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                subtitle,
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                              const SizedBox(height: 32),
+                              ...children,
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 32),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Não tem uma conta?',
+                          style: TextStyle(
+                            color: Colors.white.withOpacity(0.9),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: _isLoading ? null : () => Navigator.pushNamed(context, '/signup'),
+                          child: const Text(
+                            'Cadastre-se',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
