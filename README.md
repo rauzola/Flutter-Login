@@ -9,6 +9,7 @@ Este projeto foi desenvolvido como parte da avaliação do 1º Bimestre, focando
 
 - [Flutter](https://flutter.dev/)
 - [Dart](https://dart.dev/)
+- [Supabase](https://supabase.com/)
 - [Git](https://git-scm.com/)
 - [GitHub](https://github.com)
 
