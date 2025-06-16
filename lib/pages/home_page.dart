@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:telalogin/pages/professor_list_page.dart';
+import 'package:telalogin/pages/sala_list_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -76,6 +77,16 @@ class _HomePageState extends State<HomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (_) => const ProfessorListPage()),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.meeting_room),
+              title: const Text('Salas'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const SalaListPage()),
                 );
               },
             ),
