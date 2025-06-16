@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+// Telas
+import 'package:telalogin/pages/home_page.dart';
 import 'package:telalogin/Login.dart';
 import 'package:telalogin/TelaCadastro.dart';
 import 'package:telalogin/TelaRecuperacaoSenha.dart';
@@ -30,7 +32,7 @@ class AuthApp extends StatelessWidget {
         '/login': (context) => const LoginScreen(),
         '/signup': (context) => const SignUpScreen(),
         '/forgot-password': (context) => const ForgotPasswordScreen(),
-        '/home': (context) => const HomeScreen(),
+        '/home': (context) => const HomePage(),  // <- novo
       },
     );
   }
@@ -62,7 +64,7 @@ class AuthWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     return Supabase.instance.client.auth.currentUser == null
         ? const LoginScreen()
-        : const HomeScreen();
+        : const HomePage();
   }
 }
 
