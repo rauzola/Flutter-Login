@@ -1,6 +1,7 @@
 // lib/pages/home_page.dart
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:telalogin/pages/ensalamento_list_page.dart';
 import 'package:telalogin/pages/professor_list_page.dart';
 import 'package:telalogin/pages/sala_list_page.dart';
 import 'package:telalogin/pages/turma_list_page.dart'; // ✅ import da turma
@@ -65,7 +66,8 @@ class _HomePageState extends State<HomePage> {
               leading: const Icon(Icons.info),
               title: const Text('Sobre'),
               onTap: () {
-                // Tela de Sobre
+                Navigator.pop(context);
+                // TODO: implementar navegação para a página Sobre
               },
             ),
             ListTile(
@@ -101,6 +103,17 @@ class _HomePageState extends State<HomePage> {
                 );
               },
             ),
+            ListTile(
+  leading: const Icon(Icons.schedule),
+  title: const Text('Ensalamento'),
+  onTap: () {
+    Navigator.pop(context);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const EnsalamentoListPage()),
+    );
+  },
+),
           ],
         ),
       ),
