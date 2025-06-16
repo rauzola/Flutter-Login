@@ -84,6 +84,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     final user = Supabase.instance.client.auth.currentUser;
 
     return Scaffold(

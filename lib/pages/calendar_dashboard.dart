@@ -7,10 +7,10 @@ class CalendarDashboard extends StatefulWidget {
   const CalendarDashboard({Key? key}) : super(key: key);
 
   @override
-  State<CalendarDashboard> createState() => _CalendarDashboardState();
+  CalendarDashboardState createState() => CalendarDashboardState();
 }
 
-class _CalendarDashboardState extends State<CalendarDashboard> {
+class CalendarDashboardState extends State<CalendarDashboard> {
   final supabase = Supabase.instance.client;
 
   bool _loading = true;
@@ -23,42 +23,44 @@ class _CalendarDashboardState extends State<CalendarDashboard> {
   @override
   void initState() {
     super.initState();
-    _loadEnsalamentos();
+    loadEnsalamentos();
   }
 
-Future<void> _loadEnsalamentos() async {
-  setState(() {
-    _loading = true;
-    _error = null;
-  });
+  Future<void> loadEnsalamentos() async {
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
 
-  try {
-    final dataList = await supabase
-        .from('ensalamento')
-        .select('id, data, horario, turma_id, sala_id, professor_id, turma(nome), sala(nome), professor(name)');
+    try {
+      final dataList = await supabase
+          .from('ensalamento')
+          .select(
+            'id, data, horario, turma_id, sala_id, professor_id, turma(nome), sala(nome), professor(name)',
+          );
 
-    final rows = dataList as List<dynamic>;
+      final rows = dataList as List<dynamic>;
 
-    List<Ensalamento> ensalamentos = rows.map((e) => Ensalamento.fromJoin(e)).toList();
+      List<Ensalamento> ensalamentos =
+          rows.map((e) => Ensalamento.fromJoin(e)).toList();
 
-    Map<DateTime, List<Ensalamento>> events = {};
-    for (var e in ensalamentos) {
-      final day = DateTime.utc(e.data.year, e.data.month, e.data.day);
-      events.putIfAbsent(day, () => []).add(e);
+      Map<DateTime, List<Ensalamento>> events = {};
+      for (var e in ensalamentos) {
+        final day = DateTime.utc(e.data.year, e.data.month, e.data.day);
+        events.putIfAbsent(day, () => []).add(e);
+      }
+
+      setState(() {
+        _events = events;
+        _loading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _error = e.toString();
+        _loading = false;
+      });
     }
-
-    setState(() {
-      _events = events;
-      _loading = false;
-    });
-  } catch (e) {
-    setState(() {
-      _error = e.toString();
-      _loading = false;
-    });
   }
-}
-
 
   List<Ensalamento> _getEventsForDay(DateTime day) {
     final d = DateTime.utc(day.year, day.month, day.day);
@@ -81,26 +83,34 @@ Future<void> _loadEnsalamentos() async {
 
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
-        title: Text('Ensalamento em ${selectedDay.day}/${selectedDay.month}/${selectedDay.year}'),
-        content: SizedBox(
-          width: double.maxFinite,
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: events.length,
-            itemBuilder: (context, index) {
-              final e = events[index];
-              return ListTile(
-                title: Text('${e.turmaNome} - Sala: ${e.salaNome}'),
-                subtitle: Text('Professor: ${e.professorNome}\nHorário: ${e.horario}'),
-              );
-            },
+      builder:
+          (_) => AlertDialog(
+            title: Text(
+              'Ensalamento em ${selectedDay.day}/${selectedDay.month}/${selectedDay.year}',
+            ),
+            content: SizedBox(
+              width: double.maxFinite,
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: events.length,
+                itemBuilder: (context, index) {
+                  final e = events[index];
+                  return ListTile(
+                    title: Text('${e.turmaNome} - Sala: ${e.salaNome}'),
+                    subtitle: Text(
+                      'Professor: ${e.professorNome}\nHorário: ${e.horario}',
+                    ),
+                  );
+                },
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Fechar'),
+              ),
+            ],
           ),
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Fechar')),
-        ],
-      ),
     );
   }
 
@@ -112,6 +122,20 @@ Future<void> _loadEnsalamentos() async {
     if (_error != null) {
       return Center(child: Text('Erro: $_error'));
     }
+    TableCalendar(
+      locale: 'pt_BR', // importante!
+      firstDay: DateTime.utc(2020, 1, 1),
+      lastDay: DateTime.utc(2030, 12, 31),
+      focusedDay: DateTime.now(),
+      availableGestures: AvailableGestures.all,
+      calendarFormat: CalendarFormat.week,
+
+      eventLoader: (day) {
+        // Use a null aware operator "??" to make this line simpler. If
+        // _events[day] is null, return the empty list instead.
+        return _events[day] ?? [];
+      },
+    );
 
     return Padding(
       padding: const EdgeInsets.all(12),
@@ -119,15 +143,19 @@ Future<void> _loadEnsalamentos() async {
         firstDay: DateTime.utc(2020, 1, 1),
         lastDay: DateTime.utc(2030, 12, 31),
         focusedDay: _focusedDay,
-        selectedDayPredicate: (day) =>
-            _selectedDay != null &&
-            day.year == _selectedDay!.year &&
-            day.month == _selectedDay!.month &&
-            day.day == _selectedDay!.day,
+        selectedDayPredicate:
+            (day) =>
+                _selectedDay != null &&
+                day.year == _selectedDay!.year &&
+                day.month == _selectedDay!.month &&
+                day.day == _selectedDay!.day,
         eventLoader: _getEventsForDay,
         onDaySelected: _onDaySelected,
         calendarStyle: const CalendarStyle(
-          markerDecoration: BoxDecoration(color: Colors.deepPurple, shape: BoxShape.circle),
+          markerDecoration: BoxDecoration(
+            color: Colors.deepPurple,
+            shape: BoxShape.circle,
+          ),
         ),
       ),
     );
