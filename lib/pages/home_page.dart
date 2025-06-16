@@ -1,6 +1,7 @@
 // lib/pages/home_page.dart
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:telalogin/pages/professor_list_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,9 +15,9 @@ class _HomePageState extends State<HomePage> {
 
   // Telas do BottomNavigationBar
   final List<Widget> _pages = const [
-    _Dashboard(),       // você cria embaixo
-    _Perfil(),          // idem
-    _Configuracoes(),   // idem
+    _Dashboard(), // você cria embaixo
+    _Perfil(), // idem
+    _Configuracoes(), // idem
   ];
 
   Future<void> _signOut() async {
@@ -49,7 +50,8 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Config.'),
         ],
       ),
-      drawer: Drawer(               // opcional, se quiser um menu lateral
+      drawer: Drawer(
+        // opcional, se quiser um menu lateral
         child: ListView(
           children: [
             UserAccountsDrawerHeader(
@@ -62,7 +64,20 @@ class _HomePageState extends State<HomePage> {
             ListTile(
               leading: const Icon(Icons.info),
               title: const Text('Sobre'),
-              onTap: () { /* navegue para uma tela de Sobre */ },
+              onTap: () {
+                /* navegue para uma tela de Sobre */
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.school),
+              title: const Text('Professores'),
+              onTap: () {
+                Navigator.pop(context); // fecha o drawer
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const ProfessorListPage()),
+                );
+              },
             ),
           ],
         ),
