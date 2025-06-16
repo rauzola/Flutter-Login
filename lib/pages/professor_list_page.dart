@@ -43,28 +43,29 @@ class _ProfessorListPageState extends State<ProfessorListPage> {
   }
 
   Future<void> _deleteProfessor(int id) async {
-  showDialog(
-    context: context,
-    barrierDismissible: false,
-    builder: (_) => const Center(child: CircularProgressIndicator()),
-  );
-
-  try {
-    await supabase.from('professor').delete().eq('id', id);
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Professor removido')),
-      );
-      await _fetchProfessores();
-    }
-  } on PostgrestException catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Erro ao remover: ${e.message}')),
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const Center(child: CircularProgressIndicator()),
     );
-  } finally {
-    if (mounted) Navigator.of(context).pop(); // fecha o loading
+
+    try {
+      await supabase.from('professor').delete().eq('id', id);
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Professor removido')));
+        await _fetchProfessores();
+      }
+    } on PostgrestException catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Erro ao remover: ${e.message}')));
+    } finally {
+      if (mounted) Navigator.of(context).pop(); // fecha o loading
+    }
   }
-}
+
   void _navigateToForm([Professor? professor]) async {
     final result = await Navigator.push(
       context,
@@ -72,8 +73,10 @@ class _ProfessorListPageState extends State<ProfessorListPage> {
         builder: (_) => ProfessorFormPage(professor: professor),
       ),
     );
+
     if (result == true) {
-      await _fetchProfessores(); // importante ser await
+      setState(() => _loading = true);
+      await _fetchProfessores();
     }
   }
 
