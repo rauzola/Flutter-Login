@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:telalogin/pages/professor_list_page.dart';
 import 'package:telalogin/pages/sala_list_page.dart';
+import 'package:telalogin/pages/turma_list_page.dart'; // ✅ import da turma
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,11 +15,10 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
 
-  // Telas do BottomNavigationBar
   final List<Widget> _pages = const [
-    _Dashboard(), // você cria embaixo
-    _Perfil(), // idem
-    _Configuracoes(), // idem
+    _Dashboard(),
+    _Perfil(),
+    _Configuracoes(),
   ];
 
   Future<void> _signOut() async {
@@ -52,7 +52,6 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       drawer: Drawer(
-        // opcional, se quiser um menu lateral
         child: ListView(
           children: [
             UserAccountsDrawerHeader(
@@ -66,14 +65,14 @@ class _HomePageState extends State<HomePage> {
               leading: const Icon(Icons.info),
               title: const Text('Sobre'),
               onTap: () {
-                /* navegue para uma tela de Sobre */
+                // Tela de Sobre
               },
             ),
             ListTile(
               leading: const Icon(Icons.school),
               title: const Text('Professores'),
               onTap: () {
-                Navigator.pop(context); // fecha o drawer
+                Navigator.pop(context);
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (_) => const ProfessorListPage()),
@@ -84,9 +83,21 @@ class _HomePageState extends State<HomePage> {
               leading: const Icon(Icons.meeting_room),
               title: const Text('Salas'),
               onTap: () {
+                Navigator.pop(context);
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (_) => const SalaListPage()),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.class_),
+              title: const Text('Turmas'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const TurmaListPage()),
                 );
               },
             ),
@@ -96,8 +107,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-/* ====== Páginas internas (placeholders) ====== */
 
 class _Dashboard extends StatelessWidget {
   const _Dashboard();
