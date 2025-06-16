@@ -5,6 +5,9 @@ class Ensalamento {
   final int? turmaId;
   final int? salaId;
   final int? professorId;
+  final String? turmaNome;
+  final String? salaNome;
+  final String? professorNome;
   final DateTime? createdAt;
 
   Ensalamento({
@@ -14,6 +17,9 @@ class Ensalamento {
     this.turmaId,
     this.salaId,
     this.professorId,
+    this.turmaNome,
+    this.salaNome,
+    this.professorNome,
     this.createdAt,
   });
 
@@ -29,10 +35,26 @@ class Ensalamento {
     );
   }
 
+  // 🔥 Esse é o método que estava faltando
+  factory Ensalamento.fromJoin(Map<String, dynamic> map) {
+    return Ensalamento(
+      id: map['id'] as int?,
+      data: DateTime.parse(map['data'] as String),
+      horario: map['horario'] as String,
+      turmaId: map['turma_id'] as int?,
+      salaId: map['sala_id'] as int?,
+      professorId: map['professor_id'] as int?,
+      turmaNome: map['turma']?['nome'],
+      salaNome: map['sala']?['nome'],
+      professorNome: map['professor']?['name'],
+      createdAt: map['created_at'] != null ? DateTime.parse(map['created_at']) : null,
+    );
+  }
+
   Map<String, dynamic> toMap() {
     return {
       if (id != null) 'id': id,
-      'data': data.toIso8601String().substring(0,10), // só a data yyyy-MM-dd
+      'data': data.toIso8601String().substring(0, 10),
       'horario': horario,
       'turma_id': turmaId,
       'sala_id': salaId,

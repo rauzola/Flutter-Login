@@ -5,6 +5,7 @@ import 'package:telalogin/pages/ensalamento_list_page.dart';
 import 'package:telalogin/pages/professor_list_page.dart';
 import 'package:telalogin/pages/sala_list_page.dart';
 import 'package:telalogin/pages/turma_list_page.dart'; // ✅ import da turma
+import 'package:telalogin/pages/calendar_dashboard.dart';  // import novo
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,11 +17,11 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
 
-  final List<Widget> _pages = const [
-    _Dashboard(),
-    _Perfil(),
-    _Configuracoes(),
-  ];
+final List<Widget> _pages = [
+  const CalendarDashboard(),
+  const _Perfil(),
+  const _Configuracoes(),
+];
 
   Future<void> _signOut() async {
     await Supabase.instance.client.auth.signOut();
@@ -33,7 +34,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Meu App'),
+        title: const Text('Ensala +'),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
@@ -47,7 +48,7 @@ class _HomePageState extends State<HomePage> {
         currentIndex: _currentIndex,
         onTap: (index) => setState(() => _currentIndex = index),
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Início'),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Ensalamento'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Perfil'),
           BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Config.'),
         ],
@@ -55,21 +56,13 @@ class _HomePageState extends State<HomePage> {
       drawer: Drawer(
         child: ListView(
           children: [
-            UserAccountsDrawerHeader(
-              currentAccountPicture: const CircleAvatar(
-                child: Icon(Icons.person),
-              ),
-              accountName: Text(user?.email ?? ''),
-              accountEmail: Text(user?.id ?? ''),
-            ),
-            ListTile(
-              leading: const Icon(Icons.info),
-              title: const Text('Sobre'),
-              onTap: () {
-                Navigator.pop(context);
-                // TODO: implementar navegação para a página Sobre
-              },
-            ),
+          UserAccountsDrawerHeader(
+        currentAccountPicture: CircleAvatar(
+          backgroundImage: NetworkImage('https://unicv.edu.br/wp-content/uploads/2020/12/logo-verde-280X100.png'),
+        ),
+        accountName: Text(user?.email ?? ''),
+        accountEmail: Text(user?.id ?? ''),
+      ),
             ListTile(
               leading: const Icon(Icons.school),
               title: const Text('Professores'),
@@ -121,14 +114,7 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class _Dashboard extends StatelessWidget {
-  const _Dashboard();
 
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Bem‑vindo ao dashboard!'));
-  }
-}
 
 class _Perfil extends StatelessWidget {
   const _Perfil();
